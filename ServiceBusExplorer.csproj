@@ -154,9 +154,7 @@
     <Compile Include="Controls\MetricMonitorControl.Designer.cs">
       <DependentUpon>MetricMonitorControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DataGridViewDateTimePickerColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Controls\DataGridViewDateTimePickerColumn.cs" />
     <Compile Include="Controls\Grouper.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -389,6 +387,8 @@
     <Compile Include="Helpers\IEventDataInspector.cs" />
     <Compile Include="Helpers\IBrokeredMessageInspector.cs" />
     <Compile Include="Helpers\LogBrokeredMessageInspector.cs" />
+    <Compile Include="Helpers\MessageReceiverExtensions.cs" />
+    <Compile Include="Helpers\MessageSenderExtensions.cs" />
     <Compile Include="Helpers\MessageSerializationHelper.cs" />
     <Compile Include="Helpers\NotificationHubAuthorizationRuleWrapper.cs" />
     <Compile Include="Helpers\OnOffDeviceBrokeredMessageGenerator.cs" />

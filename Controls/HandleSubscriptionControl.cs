@@ -1207,10 +1207,13 @@ namespace Microsoft.WindowsAzure.CAT.ServiceBusExplorer
 
                 if (peek)
                 {
-                    var messageReceiver = serviceBusHelper.MessagingFactory.CreateMessageReceiver(SubscriptionClient.FormatDeadLetterPath(subscriptionWrapper.SubscriptionDescription.TopicPath,
-                                                                                                                              subscriptionWrapper.SubscriptionDescription.Name),
-                                                                                              ReceiveMode.PeekLock);
-                    var messageEnumerable = messageReceiver.PeekBatch(count);
+                    var messageReceiver = serviceBusHelper.MessagingFactory.CreateMessageReceiver(
+                        SubscriptionClient.FormatDeadLetterPath(
+                            subscriptionWrapper.SubscriptionDescription.TopicPath,
+                            subscriptionWrapper.SubscriptionDescription.Name),
+                        ReceiveMode.PeekLock);
+
+                    var messageEnumerable = messageReceiver.PeekBatch(0, count);
                     if (messageEnumerable == null)
                     {
                         return;
@@ -2741,7 +2744,7 @@ namespace Microsoft.WindowsAzure.CAT.ServiceBusExplorer
                 {
                     BodyType bodyType;
                     var message = r.DataBoundItem as BrokeredMessage;
-                    serviceBusHelper.GetMessageText(message, out bodyType);
+                    string messageBody = serviceBusHelper.GetMessageText(message, out bodyType);
                     if (bodyType == BodyType.Wcf)
                     {
                         var wcfUri = serviceBusHelper.IsCloudNamespace ?
@@ -2758,7 +2761,7 @@ namespace Microsoft.WindowsAzure.CAT.ServiceBusExplorer
                                                                             false,
                                                                             wcfUri);
                     }
-                    return serviceBusHelper.CreateMessageForApiReceiver(message,
+                    return serviceBusHelper.CreateMessageForApiReceiver(message.Clone(messageBody),
                                                                         0,
                                                                         false,
                                                                         false,
@@ -2827,7 +2830,7 @@ namespace Microsoft.WindowsAzure.CAT.ServiceBusExplorer
                 {
                     BodyType bodyType;
                     var message = r.DataBoundItem as BrokeredMessage;
-                    serviceBusHelper.GetMessageText(message, out bodyType);
+                    string messageBody = serviceBusHelper.GetMessageText(message, out bodyType);
                     if (bodyType == BodyType.Wcf)
                     {
                         var wcfUri = serviceBusHelper.IsCloudNamespace ?
@@ -2844,7 +2847,7 @@ namespace Microsoft.WindowsAzure.CAT.ServiceBusExplorer
                                                                             false,
                                                                             wcfUri);
                     }
-                    return serviceBusHelper.CreateMessageForApiReceiver(message,
+                    return serviceBusHelper.CreateMessageForApiReceiver(message.Clone(messageBody),
                                                                         0,
                                                                         false,
                                                                         false,
@@ -2856,7 +2859,7 @@ namespace Microsoft.WindowsAzure.CAT.ServiceBusExplorer
                 if (brokeredMessages.Any())
                 {
                     sent = brokeredMessages.Count();
-                    await messageSender.SendBatchAsync(brokeredMessages);
+                    await messageSender.SendPartitionedBatchAsync(brokeredMessages);
                 }
                 writeToLog(string.Format(MessageSentMessage, sent, entityPath));
             }
