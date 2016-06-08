@@ -32,7 +32,7 @@ namespace Microsoft.WindowsAzure.CAT.ServiceBusExplorer
     /// </summary>
     public static class MessageReceiverClientExtensions
     {
-        public static IEnumerable<BrokeredMessage> PeekBatch(
+        public static IEnumerable<BrokeredMessage> PeekPartitionedBatch(
             this MessageReceiver messageReceiver,
             int fromSequenceNumber,
             int messageCount)

@@ -1213,7 +1213,7 @@ namespace Microsoft.WindowsAzure.CAT.ServiceBusExplorer
                             subscriptionWrapper.SubscriptionDescription.Name),
                         ReceiveMode.PeekLock);
 
-                    var messageEnumerable = messageReceiver.PeekBatch(0, count);
+                    var messageEnumerable = messageReceiver.PeekPartitionedBatch(0, count);
                     if (messageEnumerable == null)
                     {
                         return;
